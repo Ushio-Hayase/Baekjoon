@@ -24,9 +24,6 @@ void print(int N)
 
 int main()
 {
-	cin.tie(NULL);
-	ios::sync_with_stdio(false);
-
 	string str1, str2, str3;
 	cin >> str1;
 	cin >> str2;

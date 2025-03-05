@@ -13,14 +13,15 @@ int main()
 
     cin >> arr;
 
-    long long result = 0;
+    unsigned long long result = 0;
+    unsigned long long tmp = 1;
 
     for (int i = 0; i < N; ++i)
     {
-        result += (static_cast<int>(arr[i] - 'a' + 1) *
-                   static_cast<long long>(pow(31, i))) %
-                  1234567891;
+        result += static_cast<int>(arr[i] - 'a' + 1) * tmp % 1234567891;
+        tmp *= 31;
+        tmp %= 1234567891;
     }
 
-    cout << result;
+    cout << result % 1234567891;
 }

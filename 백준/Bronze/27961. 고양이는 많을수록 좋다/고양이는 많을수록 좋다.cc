@@ -1,19 +1,35 @@
+#include <cmath>
 #include <iostream>
 
 using namespace std;
 
-int main() {
-  ios::sync_with_stdio(0);
-  cin.tie(0);
-  long long n, ans = 0, a = 0;
-  cin >> n;
-  while (a < n) {
-    if (a == 0)
-      a++;
-    else 
-      a *= 2;
-    ans++;
-  }
-  cout << ans;
-  return 0;
+unsigned long long N;
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    cin >> N;
+
+    if (N == 1 || N == 0)
+    {
+        cout << N;
+        return 0;
+    }
+
+    int i = 64;
+
+    N--;
+
+    while (
+        (N &
+         0b10000000'00000000'00000000'00000000'00000000'00000000'00000000'00000000) !=
+        0x80'00'00'00'00'00'00'00)
+    {
+        N <<= 1;
+        i--;
+    }
+
+    cout << i + 1;
 }

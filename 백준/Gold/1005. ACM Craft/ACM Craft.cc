@@ -1,57 +1,69 @@
-#include<iostream>
-#include<string>
-#include<vector>
-#include<queue>
-
+#include <iostream>
+#include <queue>
+#include <vector>
 using namespace std;
 
-int main() {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
+int T, N, K;
 
-	int T;
-	cin >> T;
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
 
-	for (int i = 0; i < T; ++i) {
-		int N, K, W, top, next;
-		vector<int> D(1001, 0);
-		vector<int> node[1001];
-		vector<int> degree(1001, 0);
-		vector<int> sum(1001, 0);
-		queue<int> q;
+    cin >> T;
 
-		cin >> N >> K;
-		for (int j = 1; j <= N; ++j) {
-			cin >> D[j];
-			sum[j] = D[j];
-		}
-		for (int j = 0; j < K; ++j) {
-			int x, y;
-			cin >> x >> y;
-			node[x].push_back(y);
-			degree[y]++;
-		}
+    for (int t = 0; t < T; ++t)
+    {
 
-		cin >> W;
-		for (int j = 1; j <= N; ++j) {
-			if (degree[j]==0) 
-				q.push(j);
-			
-		}
-		while (!q.empty()) {
-			top = q.front();
-			q.pop();
-			for (int j = 0; j < node[top].size(); j++) {
-				next = node[top][j];
-				if (sum[top] + D[next] > sum[next]) sum[next] = sum[top] + D[next];
-				degree[next]--;
-				if (!degree[next]) q.push(next);
-			}
-		}
+        cin >> N >> K;
 
-		cout << sum[W]<<"\n";
+        vector<int> adj[1001];
+        vector<int> constructTime(1001, 0);
+        vector<int> dp(1001, 0);
+        vector<int> inDegree(1001, 0);
+        for (int i = 1; i <= N; ++i)
+        {
+            cin >> constructTime[i];
+            dp[i] = constructTime[i];
+        }
 
-	}
-	return 0;
+        for (int i = 1; i <= K; ++i)
+        {
+            int x, y;
+            cin >> x >> y;
+            adj[x].push_back(y);
+            inDegree[y]++;
+        }
+
+        int W;
+        cin >> W;
+
+        queue<int> q;
+        for (int i = 1; i <= N; ++i)
+        {
+            if (inDegree[i] == 0)
+            {
+                q.push(i);
+            }
+        }
+        while (!q.empty())
+        {
+            int node = q.front();
+            q.pop();
+
+            for (int i = 0; i < adj[node].size(); ++i)
+            {
+                int next = adj[node][i];
+
+                dp[next] = dp[node] + constructTime[next] > dp[next] ? dp[node] + constructTime[next] : dp[next];
+                inDegree[next]--;
+                if (inDegree[next] == 0)
+
+                    q.push(next);
+            }
+        }
+
+        cout << dp[W] << "\n";
+    }
 }

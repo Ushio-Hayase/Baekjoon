@@ -1,6 +1,4 @@
-#include <algorithm>
 #include <iostream>
-#include <vector>
 
 using namespace std;
 
@@ -9,6 +7,10 @@ int arr[10001];
 
 int main()
 {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+
     cin >> N;
 
     while (N--)

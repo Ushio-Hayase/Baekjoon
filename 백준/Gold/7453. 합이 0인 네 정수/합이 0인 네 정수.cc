@@ -38,6 +38,7 @@ int main()
         for (int j = 0; j < N; ++j) sum[1].push_back(arr[2][i] + arr[3][j]);
 
     sort(sum[1].begin(), sum[1].end());
+    sort(sum[0].begin(), sum[0].end());
 
     for (size_t i = 0; i < N * N; ++i)
     {

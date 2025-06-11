@@ -16,7 +16,7 @@ int main()
     vector<long long> arr;
     vector<long long> answer;
     answer.resize(3);
-    long long min = numeric_limits<long long>::max();
+    long long min = numeric_limits<long long>::max() - 1;
 
     arr.resize(N);
 
@@ -24,31 +24,31 @@ int main()
 
     sort(arr.begin(), arr.end());
 
-    for (int i = 0; i < N; ++i)
+    for (int i = 0; i < N - 2; ++i)
     {
-        long long left = arr[i];
-        for (int j = N - 1; j > i + 1; --j)
-        {
-            long long right = arr[j];
-            auto middle1 = lower_bound(arr.begin() + i + 1, arr.begin() + j, -(left + right));
-            auto middle2 = middle1 - 1;
+        int left = i + 1;
+        int right = N - 1;
 
-            if (abs(left + right + *middle1) < min && right != *middle1)
+        while (left < right)
+        {
+            if (abs(arr[left] + arr[right] + arr[i]) <= min)
             {
-                min = abs(left + right + *middle1);
-                answer[0] = left;
-                answer[1] = *middle1;
-                answer[2] = right;
+                min = abs(arr[left] + arr[right] + arr[i]);
+                answer[0] = arr[i];
+                answer[1] = arr[left];
+                answer[2] = arr[right];
             }
-            if (abs(left + right + *middle2) < min && left != *middle2)
+            if (arr[left] + arr[right] + arr[i] < 0LL)
+                left++;
+            else if (arr[left] + arr[right] + arr[i] > 0LL)
+                right--;
+            else
             {
-                min = abs(left + right + *middle2);
-                answer[0] = left;
-                answer[1] = *middle2;
-                answer[2] = right;
+                cout << arr[i] << ' ' << arr[left] << ' ' << arr[right];
+                exit(0);
             }
         }
     }
 
-    for (int i : answer) cout << i << ' ';
+    for (auto i : answer) cout << i << ' ';
 }

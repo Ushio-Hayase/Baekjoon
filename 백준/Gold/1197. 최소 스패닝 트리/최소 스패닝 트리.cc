@@ -1,58 +1,60 @@
 #include <iostream>
-#include <numeric>
-#include <queue>
 #include <vector>
+#include <queue>
+#include <tuple>
 
+#define X first
+#define Y second
+
+ 
 using namespace std;
+int v,e;
+/*vector<pair<int,int>> adj[10000]; // price, node number 
+bool visited [10000]; */
 
-int V, E, MST;
-
-vector<pair<int, int>> edges[10001];
-bool visit[10001];
-
-int main()
+int main(int argc, char* argv[])
 {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cout.tie(nullptr);
-
-    cin >> V >> E;
-
-    for (int i = 0; i < E; ++i)
+    cin >> v >> e;
+    vector<vector<pair<int,int>>> adj(v+1);
+    vector<bool> visited(v+1,false); 
+    for (int i = 0 ;i < e ; i ++ )
     {
-        int u, v, w;
-        cin >> u >> v >> w;
-
-        edges[u].emplace_back(v, w);
-        edges[v].emplace_back(u, w);
+        int a,b, price;
+        cin >> a >> b >> price;
+        adj[a].push_back(make_pair(price,b));
+        adj[b].push_back(make_pair(price,a)); 
     }
-
-    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
-    pq.emplace(0, 1);
-    while (!pq.empty())
+    
+    // Prim's algorithm
+    int cnt = 0;
+    int ans = 0;
+    // Using a priority queue to select the minimum edge 
+    priority_queue<tuple<int,int,int>,
+                    vector<tuple<int,int,int>>,
+                    greater<tuple<int,int,int>>
+                    > pq;
+    visited[1] = true; // start from node 1
+    for (auto& edge : adj[1]) {
+        pq.push({edge.X, 1, edge.Y}); // (price, from, to)
+    }
+    while (cnt < v-1) //
     {
-        int current = pq.top().second;
-        int distance = pq.top().first;
+        int price, from ,to;
+        tie(price, from, to) = pq.top();
         pq.pop();
-
-        if (!visit[current])
-        {
-            visit[current] = true;
-            int nodeNum = edges[current].size();
-            MST += distance;
-
-            for (int i = 0; i < nodeNum; ++i)
-            {
-                int nextNode = edges[current][i].first;
-                int nextDist = edges[current][i].second;
-                if (!visit[nextNode])
-                {
-
-                    pq.emplace(nextDist, nextNode);
-                }
+    
+        if (visited[to]){continue; // this is very important, we should not visit the same node again
             }
+        ans += price; // add the price of the edge to the answer 
+        visited[to] = true; // mark the node as visited 
+        cnt ++;
+        for (auto&edge: adj[to])
+        {
+            if (!visited[edge.Y]) {
+                pq.push({edge.X, from, edge.Y}); // (price, from, to)
+            } 
         }
     }
+    cout << ans << endl; 
 
-    cout << MST;
 }
